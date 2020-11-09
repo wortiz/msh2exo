@@ -1,0 +1,6 @@
+[submodule "tpls/fmt"]
+	path = tpls/fmt
+	url = https://github.com/fmtlib/fmt
+[submodule "tpls/CLI11"]
+	path = tpls/CLI11
+	url = https://github.com/CLIUtils/CLI11

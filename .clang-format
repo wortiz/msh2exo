@@ -1,0 +1,10 @@
+---
+Language:               Cpp
+BasedOnStyle:           LLVM
+AlignConsecutiveMacros: true
+IndentWidth:            2
+TabWidth:               8
+UseCRLF:                false
+UseTab:                 Never
+...
+

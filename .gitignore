@@ -1,0 +1,56 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+/build*/
+*~
+*.a
+*.o
+*.pyc
+.cproject
+.project
+/TAGS
+/tags
+/.settings/
+/CMakeLists.txt.user*
+/*.cflags
+/*.config
+/*.creator
+/*.creator.user
+/*.cxxflags
+/*.files
+/*.includes
+*.orig
+/.spack-env/
+/spack.lock
+/.idea/
+/cmake-build*/
+compile_commands.json
