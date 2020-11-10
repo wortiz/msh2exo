@@ -12,18 +12,26 @@
 #include "exodus_writer.hpp"
 #include "gmsh_reader.hpp"
 #include "options.hpp"
+#include "util.hpp"
 
 msh2exo::Options msh2exo::setup_options(CLI::App &app) {
   msh2exo::Options options;
 
+  app.add_flag_function("-V,--version", [](auto u_) { msh2exo::print_info_and_exit(); },
+                 "print version and basic info");
+
   app.add_option("input_file", options.input_file, "Input (Gmsh msh) mesh file")
-      ->required();
+      ->required()->check(CLI::ExistingFile);
+
   app.add_option("output_file", options.output_file,
                  "Output (ExodusII) mesh file")
       ->required();
   app.add_flag("-b,--builtin", options.builtin,
                  "Use builtin gmsh file reader");
   
+  app.add_flag("-v,--verbose", options.verbose,
+                 "increase verbosity");
+
   //app.add_flag("-f,--force", options.force,
   //               "Force, overwrite existing ExodusII file");
  
@@ -31,7 +39,12 @@ msh2exo::Options msh2exo::setup_options(CLI::App &app) {
   return options;
 }
 
-void msh2exo::run_conversion(msh2exo::Options &options) {
+void msh2exo::run_msh2exo(msh2exo::Options &options) {
+
+  if (options.version) {
+    msh2exo::print_info_and_exit();
+  }
+
   IntermediateMesh imesh;
 #ifdef ENABLE_GMSH
   if (options.builtin) {
@@ -42,5 +55,5 @@ void msh2exo::run_conversion(msh2exo::Options &options) {
 #else
   imesh = msh2exo::read_gmsh_file(options.input_file);
 #endif
-  msh2exo::write_mesh(imesh, options.output_file, options.force);
+  msh2exo::write_mesh(imesh, options.output_file, options);
 }

@@ -6,14 +6,19 @@
 
 #pragma once
 
+#include <fmt/core.h>
+#include <fmt/ostream.h>
 #include <string>
+
 #include "config.hpp"
 #ifndef ENABLE_SOURCE_LOCATION
 
-#define MSH2EXO_CHECK(status, msg) msh2exo::failure_check_func(status, msg, __LINE__, __FILE__)
+#define MSH2EXO_CHECK(status, msg)                                             \
+  msh2exo::failure_check_func(status, msg, __LINE__, __FILE__)
 
 namespace msh2exo {
-void failure_check_func(bool status, std::string_view msg, size_t line, std::string file);
+void failure_check_func(bool status, std::string_view msg, size_t line,
+                        std::string file);
 }
 #else
 #include <experimental/source_location>
@@ -23,7 +28,19 @@ void failure_check_func(bool status, std::string_view msg, size_t line, std::str
 namespace msh2exo {
 
 void failure_check_func(bool status, std::string_view msg,
-                   const std::experimental::source_location &location =
-                       std::experimental::source_location::current());
+                        const std::experimental::source_location &location =
+                            std::experimental::source_location::current());
 }
 #endif
+
+namespace msh2exo {
+void print_info_and_exit(void);
+
+template <typename S, typename... Args>
+void print_if(bool flag, const S &format, Args &&... args) {
+  if (flag) {
+    fmt::vprint(format, fmt::make_args_checked<Args...>(format, args...));
+  }
+}
+
+} // namespace msh2exo

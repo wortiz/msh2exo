@@ -13,10 +13,12 @@ struct Options {
   std::string output_file;
   bool force = false;
   bool builtin = false;
+  bool verbose = false;
+  bool version = false;
 };
 
 [[nodiscard]] Options setup_options(CLI::App &app);
 
-void run_conversion(Options &options);
+void run_msh2exo(Options &options);
 
 } // namespace msh2exo

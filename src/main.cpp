@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
   CLI11_PARSE(app, argc, argv);
 
-  msh2exo::run_conversion(options);
+  msh2exo::run_msh2exo(options);
 
   return 0;
 }

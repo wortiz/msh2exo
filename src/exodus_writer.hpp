@@ -9,10 +9,12 @@
 #include <filesystem>
 
 #include "intermediate_mesh.hpp"
+#include "options.hpp"
 
 namespace msh2exo {
 
-void write_mesh(const IntermediateMesh &imesh, std::filesystem::path output,
-                bool force);
+void write_mesh(const IntermediateMesh &imesh,
+                const std::filesystem::path &output,
+                const msh2exo::Options &options);
 
 }
