@@ -1,4 +1,4 @@
-// msh-to-exo is distributed under the terms of the GNU General Public License
+// msh2exo is distributed under the terms of the GNU General Public License
 //
 // Copyright (C) 2020 Weston Ortiz
 //
@@ -6,7 +6,7 @@
 
 #include "util.hpp"
 #include <fmt/format.h>
-#ifdef NO_SOURCE_LOCATION
+#ifndef ENABLE_SOURCE_LOCATION
 void msh2exo::failure_check_func(
     bool status, std::string_view msg,
     size_t line, std::string file) {

@@ -28,6 +28,8 @@ endif()
 add_subdirectory(tpls/fmt)
 add_subdirectory(tpls/CLI11)
 
+set(ENABLE_SOURCE_LOCATION OFF CACHE BOOL "Enable experminental source location library")
+
 set(msh2exo_SOURCES
     gmsh_reader.hpp
     gmsh_reader.cpp

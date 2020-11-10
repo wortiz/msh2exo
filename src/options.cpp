@@ -1,4 +1,4 @@
-// msh-to-exo is distributed under the terms of the GNU General Public License
+// msh2exo is distributed under the terms of the GNU General Public License
 //
 // Copyright (C) 2020 Weston Ortiz
 //

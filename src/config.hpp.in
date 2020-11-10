@@ -6,3 +6,4 @@
 #define MSH2EXO_VERSION       "@PROJECT_VERSION@"
 
 #cmakedefine ENABLE_GMSH
+#cmakedefine ENABLE_SOURCE_LOCATION
