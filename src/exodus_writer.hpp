@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <filesystem>
+#include <string>
 
 #include "intermediate_mesh.hpp"
 #include "options.hpp"
@@ -14,7 +14,7 @@
 namespace msh2exo {
 
 void write_mesh(const IntermediateMesh &imesh,
-                const std::filesystem::path &output,
+                const std::string &output,
                 const msh2exo::Options &options);
 
 }

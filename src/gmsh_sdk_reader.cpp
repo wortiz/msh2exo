@@ -16,7 +16,7 @@
 #include <set>
 
 msh2exo::IntermediateMesh
-msh2exo::read_gmsh_sdk_file(std::filesystem::path filepath) {
+msh2exo::read_gmsh_sdk_file(std::string filepath) {
   gmsh::initialize();
 
   gmsh::open(filepath);

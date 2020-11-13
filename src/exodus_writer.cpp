@@ -29,7 +29,7 @@ static const std::map<msh2exo::element_type, std::string> element_type_name = {
 };
 
 void msh2exo::write_mesh(const IntermediateMesh &imesh,
-                         const std::filesystem::path &output,
+                         const std::string &output,
                          const msh2exo::Options &options) {
 
   int cpu_size = sizeof(double);
@@ -46,7 +46,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
   std::map<int64_t, size_t> elem_block_map;
   std::vector<int64_t> block_elem_start(imesh.n_blocks);
   msh2exo::print_if(options.verbose, "{}: Generating node_elem_map\n",
-                    output.string());
+                    output);
   for (int i = 0; i < imesh.n_blocks; i++) {
     block_elem_start[i] = elem_offset;
     for (int j = 0; j < imesh.blocks[i].n_elements; j++) {
@@ -66,7 +66,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
   }
 
   msh2exo::print_if(options.verbose, "{}: Generating side set pairs\n",
-                    output.string());
+                    output);
   // side sets
   int n_side_sets = 0;
   for (size_t i = 0; i < imesh.boundaries.size(); i++) {
@@ -77,7 +77,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
 
     msh2exo::print_if(options.verbose,
                       "{}: Searching boundary {} for sides, {} nodes\n",
-                      output.string(), i, nodes.size());
+                      output, i, nodes.size());
 
     for (auto node : imesh.boundaries[i].nodes) {
       for (auto elem : node_elem_map.at(node)) {
@@ -115,7 +115,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
   }
 
   msh2exo::print_if(options.verbose, "{}: Initializing exodus\n",
-                    output.string());
+                    output);
   ex_put_init(exoid, title, imesh.dim, imesh.n_nodes, imesh.n_elements,
               imesh.n_blocks, imesh.boundaries.size(), n_side_sets);
 
@@ -138,7 +138,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
   ex_put_qa(exoid, 1, qa_record);
 
   msh2exo::print_if(options.verbose, "{}: inserting connectivity\n",
-                    output.string());
+                    output);
   offset = 0;
   for (int i = 0; i < imesh.n_blocks; i++) {
     std::vector<int> conn1(imesh.blocks[i].connectivity.size());
@@ -169,7 +169,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
     z_coords[i] = imesh.coords[i * 3 + 2];
   }
 
-  msh2exo::print_if(options.verbose, "{}: inserting coords\n", output.string());
+  msh2exo::print_if(options.verbose, "{}: inserting coords\n", output);
   if (imesh.dim == 1) {
     ex_put_coord(exoid, x_coords.data(), NULL, NULL);
   } else if (imesh.dim == 2) {
@@ -179,7 +179,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
   }
 
   msh2exo::print_if(options.verbose, "{}: inserting nodesets\n",
-                    output.string());
+                    output);
   // node sets
   for (size_t i = 0; i < imesh.boundaries.size(); i++) {
     ex_put_set_param(exoid, EX_NODE_SET, imesh.boundaries[i].tag,
@@ -197,7 +197,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
   }
 
   msh2exo::print_if(options.verbose, "{}: inserting sidesets\n",
-                    output.string());
+                    output);
   // side sets
   for (size_t i = 0; i < imesh.boundaries.size(); i++) {
     std::set<std::pair<int, int>> &elem_sides = elem_sides_vec[i];

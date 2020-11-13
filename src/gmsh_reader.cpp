@@ -268,7 +268,7 @@ static std::vector<gmsh_element_group> read_elements(std::ifstream &infile) {
 }
 
 msh2exo::IntermediateMesh
-msh2exo::read_gmsh_file(std::filesystem::path filepath) {
+msh2exo::read_gmsh_file(std::string filepath) {
   std::ifstream infile(filepath);
 
   seek_string(infile, "$MeshFormat");

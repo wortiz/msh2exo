@@ -5,9 +5,8 @@
 // See the LICENSE file for license information.
 
 #pragma once
-
-#include <filesystem>
 #include <map>
+#include <string>
 
 #include "intermediate_mesh.hpp"
 
@@ -31,6 +30,6 @@ extern const std::map<gmsh_element_type, std::vector<int>>
     gmsh_type_node_order_map;
 extern const std::map<gmsh_element_type, int> gmsh_type_n_nodes;
 int n_nodes_from_type(gmsh_element_type type);
-IntermediateMesh read_gmsh_file(std::filesystem::path filepath);
-IntermediateMesh read_gmsh_sdk_file(std::filesystem::path filepath);
+IntermediateMesh read_gmsh_file(std::string filepath);
+IntermediateMesh read_gmsh_sdk_file(std::string filepath);
 } // namespace msh2exo
