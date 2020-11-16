@@ -5,7 +5,7 @@
 // See the LICENSE file for license information.
 
 #include <algorithm>
-#include <experimental/source_location>
+#include <bits/stdint-intn.h>
 #include <fmt/format.h>
 #include <fstream>
 #include <map>
@@ -258,7 +258,7 @@ static std::vector<gmsh_element_group> read_elements(std::ifstream &infile) {
     element_groups[ent].connectivity.resize(n_elements_in_block * n_nodes);
     for (size_t index = 0; index < n_elements_in_block; index++) {
       infile >> element_groups[ent].elem_ids[index];
-      for (unsigned int i = 0; i < n_nodes; i++) {
+      for (int i = 0; i < n_nodes; i++) {
         infile >> element_groups[ent].connectivity[index * n_nodes + i];
       }
     }
@@ -353,7 +353,7 @@ msh2exo::read_gmsh_file(std::string filepath) {
             imesh.blocks[block_index].name = physical.name;
             imesh.blocks[block_index].connectivity.resize(
                 imesh.blocks[block_index].n_elements * n_nodes);
-            for (size_t i = 0;
+            for (int64_t i = 0;
                  i < (imesh.blocks[block_index].n_elements * n_nodes); i++) {
               imesh.blocks[block_index].connectivity[i] =
                   node_map.at(e_group.connectivity[i]);
@@ -373,7 +373,7 @@ msh2exo::read_gmsh_file(std::string filepath) {
                     .n_nodes;
             imesh.blocks[block_index].connectivity.resize(
                 imesh.blocks[block_index].n_elements * n_nodes);
-            for (size_t i = 0;
+            for (int64_t i = 0;
                  i < (imesh.blocks[block_index].n_elements * n_nodes); i++) {
               imesh.blocks[block_index].connectivity[offset * n_nodes + i] =
                   node_map.at(e_group.connectivity[i]);
@@ -385,19 +385,19 @@ msh2exo::read_gmsh_file(std::string filepath) {
       block_index++;
     } else {
       auto &ent_set = phys_ents.at(physical.tag);
-      std::set<size_t> nodes;
+      std::set<size_t> ss_nodes;
       for (auto e_group : element_groups) {
         if (e_group.dim == physical.dim &&
             ent_set.find(e_group.tag) != ent_set.end()) {
           for (size_t i = 0; i < e_group.connectivity.size(); i++) {
-            nodes.insert(node_map.at(e_group.connectivity[i]));
+            ss_nodes.insert(node_map.at(e_group.connectivity[i]));
           }
         }
       }
       imesh.boundaries[boundary_index].name = physical.name;
       imesh.boundaries[boundary_index].tag = physical.tag;
-      imesh.boundaries[boundary_index].nodes.resize(nodes.size());
-      std::copy(nodes.begin(), nodes.end(), imesh.boundaries[boundary_index].nodes.begin()); 
+      imesh.boundaries[boundary_index].nodes.resize(ss_nodes.size());
+      std::copy(ss_nodes.begin(), ss_nodes.end(), imesh.boundaries[boundary_index].nodes.begin()); 
       boundary_index++;
     }
   }

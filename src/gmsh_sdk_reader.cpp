@@ -4,6 +4,7 @@
 //
 // See the LICENSE file for license information.
 #include "config.hpp"
+#include <bits/stdint-intn.h>
 #ifdef ENABLE_GMSH
 #include "gmsh_reader.hpp"
 #include "intermediate_mesh.hpp"
@@ -134,7 +135,7 @@ msh2exo::read_gmsh_sdk_file(std::string filepath) {
 
   std::map<size_t, int64_t> node_index_map;
   int64_t node_index = 0;
-  for (size_t block = 0; block < n_blocks; block++) {
+  for (int64_t block = 0; block < n_blocks; block++) {
     for (auto nid : node_set[block]) {
       if (node_index_map.find(nid) == node_index_map.end()) {
         node_index_map.insert({nid, node_index++});
@@ -143,7 +144,7 @@ msh2exo::read_gmsh_sdk_file(std::string filepath) {
   }
   std::map<size_t, int64_t> elem_index_map;
   int64_t elem_index = 0;
-  for (size_t block = 0; block < n_blocks; block++) {
+  for (int64_t block = 0; block < n_blocks; block++) {
     size_t start_elem_index = elem_index;
     for (auto eid : elem_set[block]) {
       if (elem_index_map.find(eid) == elem_index_map.end()) {
@@ -157,7 +158,7 @@ msh2exo::read_gmsh_sdk_file(std::string filepath) {
   imesh.n_elements = elem_index;
 
   // generate connectivity
-  for (size_t block = 0; block < n_blocks; block++) {
+  for (int64_t block = 0; block < n_blocks; block++) {
     imesh.blocks[block].connectivity.resize(
         imesh.blocks[block].n_elements *
         msh2exo::elem_info_map.at(imesh.blocks[block].type).n_nodes);
@@ -197,7 +198,7 @@ msh2exo::read_gmsh_sdk_file(std::string filepath) {
       std::set<int64_t> nodes;
       for (size_t j = 0; j < phys_elems[i].size(); j++) {
         for (size_t k = 0; k < phys_elems[i][j].elem_node_tags.size(); k++) {
-          for (int n = 0; n < phys_elems[i][j].elem_node_tags[k].size(); n++) {
+          for (size_t n = 0; n < phys_elems[i][j].elem_node_tags[k].size(); n++) {
             nodes.insert(
                 node_index_map.at(phys_elems[i][j].elem_node_tags[k][n]));
           }

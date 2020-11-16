@@ -3,6 +3,7 @@ project(msh2exo VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
@@ -48,9 +49,20 @@ configure_file(src/config.hpp.in
   ${PROJECT_BINARY_DIR}/include/config.hpp)
 
 add_executable(msh2exo src/main.cpp ${msh2exo_SOURCES})
+
 target_include_directories(msh2exo PUBLIC src ${PROJECT_BINARY_DIR}/include ${SEACASExodus_INCLUDE_DIRS}
   ${SEACASExodus_TPL_INCLUDE_DIRS} ${Gmsh_INCLUDE_DIRS})
+
 target_link_directories(msh2exo PUBLIC ${SEACASExodus_LIBRARY_DIRS}
   ${SEACASExodus_TPL_LIBRARY_DIRS})
+
 target_link_libraries(msh2exo PUBLIC ${SEACASExodus_LIBRARIES}
   ${SEACASExodus_TPL_LIBRARIES} ${Gmsh_LIBRARIES} fmt::fmt CLI11::CLI11)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  target_compile_options(msh2exo PRIVATE
+    -Wall -Wextra -pedantic -Wshadow)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  target_compile_options(msh2exo PRIVATE
+    -Wall -Wextra -pedantic -Wshadow)
+endif()

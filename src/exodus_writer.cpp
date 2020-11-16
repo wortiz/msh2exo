@@ -40,7 +40,6 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
   std::vector<std::set<std::pair<int, int>>> elem_sides_vec(
       imesh.boundaries.size());
 
-  int64_t offset = 0;
   int64_t elem_offset = 0;
   std::map<int64_t, std::set<int64_t>> node_elem_map;
   std::map<int64_t, size_t> elem_block_map;
@@ -87,7 +86,7 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
           auto block = elem_block_map.at(elem);
           const auto &info = elem_info_map.at(imesh.blocks[block].type);
 
-          for (size_t side = 0; side < info.n_sides; side++) {
+          for (int side = 0; side < info.n_sides; side++) {
             const auto &local_nodes = info.local_side_order[side];
             bool found = true;
             for (size_t ln = 0; ln < local_nodes.size(); ln++) {
@@ -139,7 +138,6 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
 
   msh2exo::print_if(options.verbose, "{}: inserting connectivity\n",
                     output);
-  offset = 0;
   for (int i = 0; i < imesh.n_blocks; i++) {
     std::vector<int> conn1(imesh.blocks[i].connectivity.size());
     for (size_t j = 0; j < conn1.size(); j++) {
