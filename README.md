@@ -41,15 +41,19 @@ $ make # should create a msh2exo executable
 
 ```sh
 msh2exo: mesh conversion utility
-Usage: ./msh2exo [OPTIONS] input_file output_file
+Usage: ./build/msh2exo [OPTIONS] input_file output_file
 
 Positionals:
-  input_file TEXT REQUIRED    Input (Gmsh msh) mesh file
+  input_file TEXT:FILE REQUIRED
+                              Input (Gmsh msh) mesh file
   output_file TEXT REQUIRED   Output (ExodusII) mesh file
 
 Options:
   -h,--help                   Print this help message and exit
+  -V,--version                print version and basic info
   -b,--builtin                Use builtin gmsh file reader
+  -v,--verbose                increase verbosity
+
 ```
 
 # Examples
