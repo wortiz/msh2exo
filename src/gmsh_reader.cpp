@@ -5,7 +5,6 @@
 // See the LICENSE file for license information.
 
 #include <algorithm>
-#include <bits/stdint-intn.h>
 #include <fmt/format.h>
 #include <fstream>
 #include <map>
@@ -43,7 +42,7 @@ const std::map<gmsh_element_type, std::vector<int>>
         {gmsh_element_type::tet10, {0, 1, 2, 3, 4, 5, 6, 7, 9, 8}},
     };
 
-static bool find_line(std::ifstream &fs, const std::string_view st) {
+static bool find_line(std::ifstream &fs, const std::string& st) {
   std::string linest;
   while (std::getline(fs, linest)) {
     if (linest == st) {
@@ -53,7 +52,7 @@ static bool find_line(std::ifstream &fs, const std::string_view st) {
   return false;
 }
 
-static void seek_string(std::ifstream &fs, const std::string_view sv) {
+static void seek_string(std::ifstream &fs, const std::string& sv) {
   MSH2EXO_CHECK(find_line(fs, sv),
                          fmt::format("gmsh reader: string {} not found", sv));
 }

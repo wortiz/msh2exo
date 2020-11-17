@@ -17,7 +17,7 @@
 msh2exo::Options msh2exo::setup_options(CLI::App &app) {
   msh2exo::Options options;
 
-  app.add_flag_function("-V,--version", []([[maybe unused]] auto u_) { msh2exo::print_info_and_exit(); },
+  app.add_flag_function("-V,--version", [](auto) { msh2exo::print_info_and_exit(); },
                  "print version and basic info");
 
   app.add_option("input_file", options.input_file, "Input (Gmsh msh) mesh file")

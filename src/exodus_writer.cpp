@@ -204,9 +204,9 @@ void msh2exo::write_mesh(const IntermediateMesh &imesh,
       std::vector<int> elems;
       std::vector<int> sides;
 
-      for (auto &[elem, side] : elem_sides) {
-        elems.push_back(elem);
-        sides.push_back(side);
+      for (auto &elem_side : elem_sides) {
+        elems.push_back(elem_side.first);
+        sides.push_back(elem_side.second);
       }
       ex_put_set_param(exoid, EX_SIDE_SET, imesh.boundaries[i].tag,
                        sides.size(), 0);

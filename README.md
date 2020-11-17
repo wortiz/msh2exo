@@ -24,7 +24,7 @@ respective licenses for usage
 - (optional) Gmsh SDK (available prebuilt through pip or the Gmsh website
   [https://gmsh.info/#Download](https://gmsh.info/#Download))
   when built with Gmsh SDK, Gmsh will be used to read the msh files
-- C++17 compatible compiler (e.g. GCC > 7)
+- C++14 compatible compiler (e.g. GCC > 5)
 
 # Building
 

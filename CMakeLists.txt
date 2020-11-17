@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(msh2exo VERSION 0.1.0)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -22,12 +22,31 @@ endif()
 find_package(SEACASExodus REQUIRED HINTS ${ACCESS}/lib/cmake/SEACASExodus)
 find_package(Gmsh 4.6)
 
-if (Gmsh_FOUND)
-  set(ENABLE_GMSH ON CACHE BOOL "Enable Gmsh SDK integration")
-endif()
-
 add_subdirectory(tpls/fmt)
 add_subdirectory(tpls/CLI11)
+
+set(MSH2EXO_THIRD_PARTY_LIBS
+  ${SEACASExodus_LIBRARIES}
+  ${SEACASExodus_TPL_LIBRARIES}
+  fmt::fmt
+  CLI11::CLI11)
+
+set(MSH2EXO_THIRD_PARTY_INCLUDES
+  ${SEACASExodus_INCLUDE_DIRS}
+  ${SEACASExodus_TPL_INCLUDE_DIRS})
+
+if (Gmsh_FOUND)
+  set(ENABLE_GMSH ON CACHE BOOL "Enable Gmsh SDK integration")
+  if (ENABLE_GMSH)
+    set(MSH2EXO_THIRD_PARTY_LIBS
+      ${MSH2EXO_THIRD_PARTY_LIBS}
+      ${Gmsh_LIBRARIES})
+
+    set(MSH2EXO_THIRD_PARTY_INCLUDES
+      ${MSH2EXO_THIRD_PARTY_INCLUDES}
+      ${Gmsh_INCLUDE_DIRS})
+  endif()
+endif()
 
 set(ENABLE_SOURCE_LOCATION OFF CACHE BOOL "Enable experminental source location library")
 
@@ -50,14 +69,15 @@ configure_file(src/config.hpp.in
 
 add_executable(msh2exo src/main.cpp ${msh2exo_SOURCES})
 
-target_include_directories(msh2exo PUBLIC src ${PROJECT_BINARY_DIR}/include ${SEACASExodus_INCLUDE_DIRS}
-  ${SEACASExodus_TPL_INCLUDE_DIRS} ${Gmsh_INCLUDE_DIRS})
+target_include_directories(msh2exo PUBLIC src
+  ${PROJECT_BINARY_DIR}/include 
+  ${MSH2EXO_THIRD_PARTY_INCLUDES})
 
-target_link_directories(msh2exo PUBLIC ${SEACASExodus_LIBRARY_DIRS}
+target_link_directories(msh2exo PUBLIC
+  ${SEACASExodus_LIBRARY_DIRS}
   ${SEACASExodus_TPL_LIBRARY_DIRS})
 
-target_link_libraries(msh2exo PUBLIC ${SEACASExodus_LIBRARIES}
-  ${SEACASExodus_TPL_LIBRARIES} ${Gmsh_LIBRARIES} fmt::fmt CLI11::CLI11)
+target_link_libraries(msh2exo PUBLIC ${MSH2EXO_THIRD_PARTY_LIBS})
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   target_compile_options(msh2exo PRIVATE

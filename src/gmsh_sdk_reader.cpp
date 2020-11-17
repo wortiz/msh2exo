@@ -4,7 +4,6 @@
 //
 // See the LICENSE file for license information.
 #include "config.hpp"
-#include <bits/stdint-intn.h>
 #ifdef ENABLE_GMSH
 #include "gmsh_reader.hpp"
 #include "intermediate_mesh.hpp"
@@ -50,7 +49,8 @@ msh2exo::read_gmsh_sdk_file(std::string filepath) {
   std::vector<std::vector<int>> phys_group_entities(phys_names.size());
 
   for (size_t i = 0; i < dim_tags.size(); i++) {
-    auto [dim, tag] = dim_tags[i];
+    auto dim = dim_tags[i].first;
+    auto tag = dim_tags[i].second;
     gmsh::model::getEntitiesForPhysicalGroup(dim, tag, phys_group_entities[i]);
   }
 
@@ -74,7 +74,8 @@ msh2exo::read_gmsh_sdk_file(std::string filepath) {
 
   std::vector<std::vector<std::size_t>> phys_group_node_tags(phys_names.size());
   for (size_t i = 0; i < dim_tags.size(); i++) {
-    auto [dim, tag] = dim_tags[i];
+    auto dim = dim_tags[i].first;
+    auto tag = dim_tags[i].second;
     std::vector<double> coord_tmp;
     gmsh::model::mesh::getNodesForPhysicalGroup(
         dim, tag, phys_group_node_tags[i], coord_tmp);

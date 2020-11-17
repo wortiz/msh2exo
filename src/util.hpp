@@ -17,7 +17,7 @@
   msh2exo::failure_check_func(status, msg, __LINE__, __FILE__)
 
 namespace msh2exo {
-void failure_check_func(bool status, std::string_view msg, size_t line,
+void failure_check_func(bool status, const std::string& msg, size_t line,
                         std::string file);
 }
 #else
@@ -27,7 +27,7 @@ void failure_check_func(bool status, std::string_view msg, size_t line,
 
 namespace msh2exo {
 
-void failure_check_func(bool status, std::string_view msg,
+void failure_check_func(bool status, const std::string& msg,
                         const std::experimental::source_location &location =
                             std::experimental::source_location::current());
 }
