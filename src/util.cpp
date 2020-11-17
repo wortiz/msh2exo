@@ -8,8 +8,8 @@
 
 #include "util.hpp"
 #ifndef ENABLE_SOURCE_LOCATION
-void msh2exo::failure_check_func(bool status, const std::string& msg, size_t line,
-                                 std::string file) {
+void msh2exo::failure_check_func(bool status, const std::string &msg,
+                                 size_t line, std::string file) {
   if (!status) {
     std::string errmsg = fmt::format("Error: {} at {}:{}", msg, file, line);
     throw std::runtime_error(errmsg);
@@ -18,7 +18,7 @@ void msh2exo::failure_check_func(bool status, const std::string& msg, size_t lin
 
 #else
 void msh2exo::failure_check_func(
-    bool status, const std::string& msg,
+    bool status, const std::string &msg,
     const std::experimental::source_location &location) {
   if (!status) {
     std::string errmsg =

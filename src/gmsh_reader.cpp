@@ -42,7 +42,7 @@ const std::map<gmsh_element_type, std::vector<int>>
         {gmsh_element_type::tet10, {0, 1, 2, 3, 4, 5, 6, 7, 9, 8}},
     };
 
-static bool find_line(std::ifstream &fs, const std::string& st) {
+static bool find_line(std::ifstream &fs, const std::string &st) {
   std::string linest;
   while (std::getline(fs, linest)) {
     if (linest == st) {
@@ -52,9 +52,9 @@ static bool find_line(std::ifstream &fs, const std::string& st) {
   return false;
 }
 
-static void seek_string(std::ifstream &fs, const std::string& sv) {
+static void seek_string(std::ifstream &fs, const std::string &sv) {
   MSH2EXO_CHECK(find_line(fs, sv),
-                         fmt::format("gmsh reader: string {} not found", sv));
+                fmt::format("gmsh reader: string {} not found", sv));
 }
 
 static void check_version(double version) {
@@ -266,8 +266,7 @@ static std::vector<gmsh_element_group> read_elements(std::ifstream &infile) {
   return element_groups;
 }
 
-msh2exo::IntermediateMesh
-msh2exo::read_gmsh_file(std::string filepath) {
+msh2exo::IntermediateMesh msh2exo::read_gmsh_file(std::string filepath) {
   std::ifstream infile(filepath);
 
   seek_string(infile, "$MeshFormat");
@@ -396,7 +395,8 @@ msh2exo::read_gmsh_file(std::string filepath) {
       imesh.boundaries[boundary_index].name = physical.name;
       imesh.boundaries[boundary_index].tag = physical.tag;
       imesh.boundaries[boundary_index].nodes.resize(ss_nodes.size());
-      std::copy(ss_nodes.begin(), ss_nodes.end(), imesh.boundaries[boundary_index].nodes.begin()); 
+      std::copy(ss_nodes.begin(), ss_nodes.end(),
+                imesh.boundaries[boundary_index].nodes.begin());
       boundary_index++;
     }
   }

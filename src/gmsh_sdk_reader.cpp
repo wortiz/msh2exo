@@ -15,8 +15,7 @@
 #include <numeric>
 #include <set>
 
-msh2exo::IntermediateMesh
-msh2exo::read_gmsh_sdk_file(std::string filepath) {
+msh2exo::IntermediateMesh msh2exo::read_gmsh_sdk_file(std::string filepath) {
   gmsh::initialize();
 
   gmsh::open(filepath);
@@ -26,10 +25,9 @@ msh2exo::read_gmsh_sdk_file(std::string filepath) {
   std::vector<double> parametric_coord;
   gmsh::model::mesh::getNodes(node_tags, coords, parametric_coord);
 
-  MSH2EXO_CHECK(
-      node_tags.size() > 0,
-      fmt::format("GMSH SDK READER: No nodes for mesh file {}",
-                  filepath.c_str()));
+  MSH2EXO_CHECK(node_tags.size() > 0,
+                fmt::format("GMSH SDK READER: No nodes for mesh file {}",
+                            filepath.c_str()));
 
   gmsh::vectorpair dim_tags;
   gmsh::model::getPhysicalGroups(dim_tags);
@@ -199,7 +197,8 @@ msh2exo::read_gmsh_sdk_file(std::string filepath) {
       std::set<int64_t> nodes;
       for (size_t j = 0; j < phys_elems[i].size(); j++) {
         for (size_t k = 0; k < phys_elems[i][j].elem_node_tags.size(); k++) {
-          for (size_t n = 0; n < phys_elems[i][j].elem_node_tags[k].size(); n++) {
+          for (size_t n = 0; n < phys_elems[i][j].elem_node_tags[k].size();
+               n++) {
             nodes.insert(
                 node_index_map.at(phys_elems[i][j].elem_node_tags[k][n]));
           }

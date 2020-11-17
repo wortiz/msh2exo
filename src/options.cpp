@@ -17,24 +17,23 @@
 msh2exo::Options msh2exo::setup_options(CLI::App &app) {
   msh2exo::Options options;
 
-  app.add_flag_function("-V,--version", [](auto) { msh2exo::print_info_and_exit(); },
-                 "print version and basic info");
+  app.add_flag_function(
+      "-V,--version", [](auto) { msh2exo::print_info_and_exit(); },
+      "print version and basic info");
 
   app.add_option("input_file", options.input_file, "Input (Gmsh msh) mesh file")
-      ->required()->check(CLI::ExistingFile);
+      ->required()
+      ->check(CLI::ExistingFile);
 
   app.add_option("output_file", options.output_file,
                  "Output (ExodusII) mesh file")
       ->required();
-  app.add_flag("-b,--builtin", options.builtin,
-                 "Use builtin gmsh file reader");
-  
-  app.add_flag("-v,--verbose", options.verbose,
-                 "increase verbosity");
+  app.add_flag("-b,--builtin", options.builtin, "Use builtin gmsh file reader");
 
-  //app.add_flag("-f,--force", options.force,
+  app.add_flag("-v,--verbose", options.verbose, "increase verbosity");
+
+  // app.add_flag("-f,--force", options.force,
   //               "Force, overwrite existing ExodusII file");
- 
 
   return options;
 }

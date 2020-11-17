@@ -13,8 +13,7 @@
 
 namespace msh2exo {
 
-void write_mesh(const IntermediateMesh &imesh,
-                const std::string &output,
+void write_mesh(const IntermediateMesh &imesh, const std::string &output,
                 const msh2exo::Options &options);
 
 }

@@ -4,11 +4,11 @@
 //
 // See the LICENSE file for license information.
 
+#include "CLI/Config.hpp"
+#include "CLI/Formatter.hpp"
 #include "exodus_writer.hpp"
 #include "gmsh_reader.hpp"
 #include "options.hpp"
-#include "CLI/Config.hpp"
-#include "CLI/Formatter.hpp"
 
 int main(int argc, char **argv) {
 

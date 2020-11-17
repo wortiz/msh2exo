@@ -17,7 +17,7 @@
   msh2exo::failure_check_func(status, msg, __LINE__, __FILE__)
 
 namespace msh2exo {
-void failure_check_func(bool status, const std::string& msg, size_t line,
+void failure_check_func(bool status, const std::string &msg, size_t line,
                         std::string file);
 }
 #else
@@ -27,7 +27,7 @@ void failure_check_func(bool status, const std::string& msg, size_t line,
 
 namespace msh2exo {
 
-void failure_check_func(bool status, const std::string& msg,
+void failure_check_func(bool status, const std::string &msg,
                         const std::experimental::source_location &location =
                             std::experimental::source_location::current());
 }
@@ -37,7 +37,7 @@ namespace msh2exo {
 void print_info_and_exit(void);
 
 template <typename S, typename... Args>
-void print_if(bool flag, const S &format, Args &&... args) {
+void print_if(bool flag, const S &format, Args &&...args) {
   if (flag) {
     fmt::vprint(format, fmt::make_args_checked<Args...>(format, args...));
   }
