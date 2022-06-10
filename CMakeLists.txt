@@ -26,10 +26,10 @@ add_subdirectory(tpls/fmt)
 add_subdirectory(tpls/CLI11)
 
 set(MSH2EXO_THIRD_PARTY_LIBS
-  ${SEACASExodus_LIBRARIES}
-  ${SEACASExodus_TPL_LIBRARIES}
   fmt::fmt
-  CLI11::CLI11)
+  CLI11::CLI11
+  ${SEACASExodus_LIBRARIES}
+  ${SEACASExodus_TPL_LIBRARIES})
 
 set(MSH2EXO_THIRD_PARTY_INCLUDES
   ${SEACASExodus_INCLUDE_DIRS}

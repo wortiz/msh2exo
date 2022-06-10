@@ -1,9 +1,10 @@
 // msh2exo is distributed under the terms of the GNU General Public License
 //
-// Copyright (C) 2020 Weston Ortiz
+// Copyright (C) 2022 Weston Ortiz
 //
 // See the LICENSE file for license information.
 
+#include <array>
 #include <algorithm>
 #include <fmt/format.h>
 #include <fstream>
