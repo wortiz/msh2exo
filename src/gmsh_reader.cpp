@@ -4,10 +4,12 @@
 //
 // See the LICENSE file for license information.
 
-#include <array>
 #include <algorithm>
+#include <array>
+#include <cassert>
 #include <fmt/format.h>
 #include <fstream>
+#include <limits>
 #include <map>
 #include <numeric>
 #include <set>
@@ -291,7 +293,8 @@ msh2exo::IntermediateMesh msh2exo::read_gmsh_file(std::string filepath) {
   for (auto ent : entities) {
     for (auto phys_tag : ent.physical_tags) {
       if (phys_ents.find(phys_tag) == phys_ents.end()) {
-        phys_ents.insert({phys_tag, {ent.tag}});
+        assert(phys_tag < std::numeric_limits<int>::max);
+        phys_ents.insert({static_cast<int>(phys_tag), {ent.tag}});
       } else {
         phys_ents[phys_tag].insert(ent.tag);
       }
