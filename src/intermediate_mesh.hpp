@@ -1,6 +1,6 @@
 // msh2exo is distributed under the terms of the GNU General Public License
 //
-// Copyright (C) 2020 Weston Ortiz
+// Copyright (C) 2022 Weston Ortiz
 //
 // See the LICENSE file for license information.
 
@@ -18,6 +18,7 @@ enum class element_type {
   tri3,
   tri6,
   quad4,
+  quad8,
   quad9,
   hex8,
   hex27,

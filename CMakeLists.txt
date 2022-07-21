@@ -86,3 +86,5 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   target_compile_options(msh2exo PRIVATE
     -Wall -Wextra -pedantic -Wshadow)
 endif()
+
+install(TARGETS msh2exo RUNTIME DESTINATION bin)

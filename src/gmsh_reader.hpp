@@ -1,6 +1,6 @@
 // msh2exo is distributed under the terms of the GNU General Public License
 //
-// Copyright (C) 2020 Weston Ortiz
+// Copyright (C) 2022 Weston Ortiz
 //
 // See the LICENSE file for license information.
 
@@ -22,6 +22,7 @@ enum class gmsh_element_type {
   tet10 = 11,
   hex27 = 12,
   point1 = 15,
+  quad8 = 16,
 };
 
 namespace msh2exo {

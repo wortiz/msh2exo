@@ -6,7 +6,7 @@ A Gmsh (Gmsh msh format) to Exodus (ExodusII format) mesh conversion utility
 
 msh2exo is distributed under the terms of the GNU General Public License
 
-Copyright (C) 2020 Weston Ortiz
+Copyright (C) 2022 Weston Ortiz
 
 See the LICENSE file for license information. 
 
@@ -20,7 +20,7 @@ respective licenses for usage
 - CMake >= 3.13 (binaries available at
   [https://cmake.org/download/](https://cmake.org/download/))
 - ExodusII library
-  [https://github.com/gsjaardema/seacas](https://github.com/gsjaardema/seacas)
+  [https://github.com/sandialabs/seacas](https://github.com/sandialabs/seacas)
 - (optional) Gmsh SDK (available prebuilt through pip or the Gmsh website
   [https://gmsh.info/#Download](https://gmsh.info/#Download))
   when built with Gmsh SDK, Gmsh will be used to read the msh files
@@ -28,13 +28,38 @@ respective licenses for usage
 
 # Building
 
+1.  A working SEACASExodus install is required
+
+    See build instructions in the SEACAS repository:
+
+    [https://github.com/sandialabs/seacas/#get-the-sources](https://github.com/sandialabs/seacas/#get-the-sources)
+
+    Or Build with spack [https://github.com/sandialabs/seacas/#spack](https://github.com/sandialabs/seacas/#spack)
+    
+    spack install seacas
+    spack load seacas
+
+2. Instructions for building `msh2exo`
+
+The following commands show an example build:
+
+`<path to seacas>` is the pass where SEACAS was installed, usually the seacas git folder, 
+if installed with spack this can be skipped
+
+`<install prefix>` is where you want the executable, will install to `<install prefix>/bin`
+
+`<path to gmsh sdk>` is the path to a downloaded gmsh SDK which contains include/gmsh.h and 
+the gmsh library under the lib folder.
+
 ```sh
 $ git clone --recursive https://github.com/wortiz/msh2exo
 $ mkdir msh2exo/build
 $ cd msh2exo/build
-$ cmake .. -DSEACASExodus_DIR=<path to exodus>/lib/cmake/SEACASExodus \
+$ cmake .. -DSEACASExodus_DIR=<path to seacas>/lib/cmake/SEACASExodus \
+     -DCMAKE_INSTALL_PREFIX=<install prefix> \ # optional
      -DGmsh_DIR=<path to gmsh sdk> # optional
-$ make # should create a msh2exo executable
+$ make # should create a msh2exo executable in msh2exo/build folder
+$ make install # optional, will install to <install prefix>/bin
 ```
 
 # Usage
@@ -62,7 +87,7 @@ Examples are available at [msh2exo-examples](https://github.com/wortiz/msh2exo-e
 
 # Supported Elements
 
-- Quadrilateral elements (First and Second Order: `QUAD4`, `QUAD9`)
+- Quadrilateral elements (First and Second Order: `QUAD4`, `QUAD8`, `QUAD9`)
 - Triangular elements (First and Second Order: `TRI3`, `TRI6`)
 - Tetrahedral elements (First Order: `TET4`)
 - Hexahedral elements (First Order: `HEX8`)

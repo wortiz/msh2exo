@@ -22,6 +22,7 @@ const std::map<gmsh_element_type, msh2exo::element_type>
         {gmsh_element_type::line2, element_type::line2},
         {gmsh_element_type::line3, element_type::line3},
         {gmsh_element_type::quad4, element_type::quad4},
+        {gmsh_element_type::quad8, element_type::quad8},
         {gmsh_element_type::quad9, element_type::quad9},
         {gmsh_element_type::tri3, element_type::tri3},
         {gmsh_element_type::tri6, element_type::tri6},
@@ -34,10 +35,10 @@ const std::map<gmsh_element_type, msh2exo::element_type>
 const std::map<gmsh_element_type, int> msh2exo::gmsh_type_n_nodes = {
     {gmsh_element_type::point1, 1}, {gmsh_element_type::line2, 2},
     {gmsh_element_type::line3, 3},  {gmsh_element_type::quad4, 4},
-    {gmsh_element_type::quad9, 9},  {gmsh_element_type::tri3, 3},
-    {gmsh_element_type::tri6, 6},   {gmsh_element_type::hex8, 8},
-    {gmsh_element_type::hex27, 27}, {gmsh_element_type::tet4, 4},
-    {gmsh_element_type::tet10, 10},
+    {gmsh_element_type::quad8, 8},  {gmsh_element_type::quad9, 9},
+    {gmsh_element_type::tri3, 3},   {gmsh_element_type::tri6, 6},
+    {gmsh_element_type::hex8, 8},   {gmsh_element_type::hex27, 27},
+    {gmsh_element_type::tet4, 4},   {gmsh_element_type::tet10, 10},
 };
 
 const std::map<gmsh_element_type, std::vector<int>>
@@ -293,7 +294,7 @@ msh2exo::IntermediateMesh msh2exo::read_gmsh_file(std::string filepath) {
   for (auto ent : entities) {
     for (auto phys_tag : ent.physical_tags) {
       if (phys_ents.find(phys_tag) == phys_ents.end()) {
-        assert(phys_tag < std::numeric_limits<int>::max);
+        assert(static_cast<int>(phys_tag) < std::numeric_limits<int>::max());
         phys_ents.insert({static_cast<int>(phys_tag), {ent.tag}});
       } else {
         phys_ents[phys_tag].insert(ent.tag);

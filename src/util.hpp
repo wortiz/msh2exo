@@ -1,6 +1,6 @@
 // msh2exo is distributed under the terms of the GNU General Public License
 //
-// Copyright (C) 2020 Weston Ortiz
+// Copyright (C) 2022 Weston Ortiz
 //
 // See the LICENSE file for license information.
 
@@ -39,7 +39,7 @@ void print_info_and_exit(void);
 template <typename S, typename... Args>
 void print_if(bool flag, const S &format, Args &&...args) {
   if (flag) {
-    fmt::vprint(format, fmt::make_args_checked<Args...>(format, args...));
+    fmt::vprint(format, fmt::make_format_args(args...));
   }
 }
 

@@ -1,6 +1,6 @@
 // msh2exo is distributed under the terms of the GNU General Public License
 //
-// Copyright (C) 2020 Weston Ortiz
+// Copyright (C) 2022 Weston Ortiz
 //
 // See the LICENSE file for license information.
 
@@ -22,6 +22,7 @@ extern "C" {
 static const std::map<msh2exo::element_type, std::string> element_type_name = {
     {msh2exo::element_type::tri3, "TRI3"},
     {msh2exo::element_type::quad4, "QUAD4"},
+    {msh2exo::element_type::quad8, "QUAD8"},
     {msh2exo::element_type::quad9, "QUAD9"},
     {msh2exo::element_type::tri6, "TRI6"},
     {msh2exo::element_type::hex8, "HEX8"},
