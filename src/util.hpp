@@ -16,6 +16,9 @@
 #define MSH2EXO_CHECK(status, msg)                                             \
   msh2exo::failure_check_func(status, msg, __LINE__, __FILE__)
 
+#define MSH2EXO_ERROR(msg)                                                     \
+  msh2exo::failure_check_func(false, msg, __LINE__, __FILE__)
+
 namespace msh2exo {
 void failure_check_func(bool status, const std::string &msg, size_t line,
                         std::string file);

@@ -14,8 +14,7 @@
 #include "options.hpp"
 #include "util.hpp"
 
-msh2exo::Options msh2exo::setup_options(CLI::App &app) {
-  msh2exo::Options options;
+void msh2exo::setup_options(CLI::App &app, msh2exo::Options &options) {
 
   app.add_flag_function(
       "-V,--version", [](auto) { msh2exo::print_info_and_exit(); },
@@ -34,8 +33,6 @@ msh2exo::Options msh2exo::setup_options(CLI::App &app) {
 
   // app.add_flag("-f,--force", options.force,
   //               "Force, overwrite existing ExodusII file");
-
-  return options;
 }
 
 void msh2exo::run_msh2exo(msh2exo::Options &options) {
@@ -45,6 +42,7 @@ void msh2exo::run_msh2exo(msh2exo::Options &options) {
   }
 
   IntermediateMesh imesh;
+
 #ifdef ENABLE_GMSH
   if (options.builtin) {
     imesh = msh2exo::read_gmsh_file(options.input_file);

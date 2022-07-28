@@ -14,7 +14,9 @@ int main(int argc, char **argv) {
 
   CLI::App app{"msh2exo: mesh conversion utility"};
 
-  msh2exo::Options options = msh2exo::setup_options(app);
+  msh2exo::Options options;
+  
+  msh2exo::setup_options(app, options);
 
   CLI11_PARSE(app, argc, argv);
 

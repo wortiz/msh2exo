@@ -17,7 +17,7 @@ struct Options {
   bool version = false;
 };
 
-[[nodiscard]] Options setup_options(CLI::App &app);
+void setup_options(CLI::App &app, Options &options);
 
 void run_msh2exo(Options &options);
 

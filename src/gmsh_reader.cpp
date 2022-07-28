@@ -19,17 +19,17 @@
 
 const std::map<gmsh_element_type, msh2exo::element_type>
     msh2exo::gmsh_type_to_elem_type = {
-        {gmsh_element_type::line2, element_type::line2},
-        {gmsh_element_type::line3, element_type::line3},
-        {gmsh_element_type::quad4, element_type::quad4},
-        {gmsh_element_type::quad8, element_type::quad8},
-        {gmsh_element_type::quad9, element_type::quad9},
-        {gmsh_element_type::tri3, element_type::tri3},
-        {gmsh_element_type::tri6, element_type::tri6},
-        {gmsh_element_type::hex8, element_type::hex8},
-        {gmsh_element_type::hex27, element_type::hex27},
-        {gmsh_element_type::tet4, element_type::tet4},
-        {gmsh_element_type::tet10, element_type::tet10},
+        {gmsh_element_type::line2, msh2exo::element_type::line2},
+        {gmsh_element_type::line3, msh2exo::element_type::line3},
+        {gmsh_element_type::quad4, msh2exo::element_type::quad4},
+        {gmsh_element_type::quad8, msh2exo::element_type::quad8},
+        {gmsh_element_type::quad9, msh2exo::element_type::quad9},
+        {gmsh_element_type::tri3, msh2exo::element_type::tri3},
+        {gmsh_element_type::tri6, msh2exo::element_type::tri6},
+        {gmsh_element_type::hex8, msh2exo::element_type::hex8},
+        {gmsh_element_type::hex27, msh2exo::element_type::hex27},
+        {gmsh_element_type::tet4, msh2exo::element_type::tet4},
+        {gmsh_element_type::tet10, msh2exo::element_type::tet10},
 };
 
 const std::map<gmsh_element_type, int> msh2exo::gmsh_type_n_nodes = {
@@ -218,19 +218,19 @@ static std::vector<gmsh_entity> read_entities(std::ifstream &infile) {
   size_t offset = n_points;
   for (size_t i = 0; i < n_curves; i++) {
     read_entity(infile, entities[i + offset]);
-    entities[i].dim = 1;
+    entities[i + offset].dim = 1;
   }
 
   offset += n_curves;
   for (size_t i = 0; i < n_surfaces; i++) {
     read_entity(infile, entities[i + offset]);
-    entities[i].dim = 2;
+    entities[i + offset].dim = 2;
   }
 
   offset += n_surfaces;
   for (size_t i = 0; i < n_volumes; i++) {
     read_entity(infile, entities[i + offset]);
-    entities[i].dim = 3;
+    entities[i + offset].dim = 3;
   }
 
   seek_string(infile, "$EndEntities");
@@ -297,7 +297,8 @@ msh2exo::IntermediateMesh msh2exo::read_gmsh_file(std::string filepath) {
         assert(static_cast<int>(phys_tag) < std::numeric_limits<int>::max());
         phys_ents.insert({static_cast<int>(phys_tag), {ent.tag}});
       } else {
-        phys_ents[phys_tag].insert(ent.tag);
+        assert(static_cast<int>(phys_tag) < std::numeric_limits<int>::max());
+        phys_ents[static_cast<int>(phys_tag)].insert(ent.tag);
       }
     }
   }
@@ -341,68 +342,78 @@ msh2exo::IntermediateMesh msh2exo::read_gmsh_file(std::string filepath) {
   for (auto physical : physical_names) {
     if (physical.dim == max_dim) {
       bool block_set = false;
-      auto &ent_set = phys_ents.at(physical.tag);
-      for (auto e_group : element_groups) {
-        if (e_group.dim == physical.dim &&
-            ent_set.find(e_group.tag) != ent_set.end()) {
+      try {
+        auto &ent_set = phys_ents.at(physical.tag);
+        for (auto e_group : element_groups) {
+          if (e_group.dim == physical.dim &&
+              ent_set.find(e_group.tag) != ent_set.end()) {
 
-          if (!block_set) {
-            imesh.blocks[block_index].n_elements = e_group.elem_ids.size();
-            imesh.blocks[block_index].type =
-                msh2exo::gmsh_type_to_elem_type.at(e_group.type);
-            int n_nodes =
-                msh2exo::elem_info_map.at(imesh.blocks[block_index].type)
-                    .n_nodes;
-            imesh.blocks[block_index].name = physical.name;
-            imesh.blocks[block_index].connectivity.resize(
-                imesh.blocks[block_index].n_elements * n_nodes);
-            for (int64_t i = 0;
-                 i < (imesh.blocks[block_index].n_elements * n_nodes); i++) {
-              imesh.blocks[block_index].connectivity[i] =
-                  node_map.at(e_group.connectivity[i]);
-            }
-            block_set = true;
-          } else {
-            MSH2EXO_CHECK(
-                msh2exo::gmsh_type_to_elem_type.at(e_group.type) ==
-                    imesh.blocks[block_index].type,
-                fmt::format("More than one element type found in physical "
-                            "group {} tag {}",
-                            physical.name, physical.tag));
-            size_t offset = imesh.blocks[block_index].n_elements;
-            imesh.blocks[block_index].n_elements += e_group.elem_ids.size();
-            int n_nodes =
-                msh2exo::elem_info_map.at(imesh.blocks[block_index].type)
-                    .n_nodes;
-            imesh.blocks[block_index].connectivity.resize(
-                imesh.blocks[block_index].n_elements * n_nodes);
-            for (int64_t i = 0;
-                 i < (imesh.blocks[block_index].n_elements * n_nodes); i++) {
-              imesh.blocks[block_index].connectivity[offset * n_nodes + i] =
-                  node_map.at(e_group.connectivity[i]);
+            if (!block_set) {
+              imesh.blocks[block_index].n_elements = e_group.elem_ids.size();
+              imesh.blocks[block_index].type =
+                  msh2exo::gmsh_type_to_elem_type.at(e_group.type);
+              int n_nodes =
+                  msh2exo::elem_info_map.at(imesh.blocks[block_index].type)
+                      .n_nodes;
+              imesh.blocks[block_index].name = physical.name;
+              imesh.blocks[block_index].connectivity.resize(
+                  imesh.blocks[block_index].n_elements * n_nodes);
+              for (int64_t i = 0;
+                   i < (imesh.blocks[block_index].n_elements * n_nodes); i++) {
+                imesh.blocks[block_index].connectivity[i] =
+                    node_map.at(e_group.connectivity[i]);
+              }
+              block_set = true;
+            } else {
+              MSH2EXO_CHECK(
+                  msh2exo::gmsh_type_to_elem_type.at(e_group.type) ==
+                      imesh.blocks[block_index].type,
+                  fmt::format("More than one element type found in physical "
+                              "group {} tag {}",
+                              physical.name, physical.tag));
+              size_t offset = imesh.blocks[block_index].n_elements;
+              imesh.blocks[block_index].n_elements += e_group.elem_ids.size();
+              int n_nodes =
+                  msh2exo::elem_info_map.at(imesh.blocks[block_index].type)
+                      .n_nodes;
+              imesh.blocks[block_index].connectivity.resize(
+                  imesh.blocks[block_index].n_elements * n_nodes);
+              for (int64_t i = 0;
+                   i < (imesh.blocks[block_index].n_elements * n_nodes); i++) {
+                imesh.blocks[block_index].connectivity[offset * n_nodes + i] =
+                    node_map.at(e_group.connectivity[i]);
+              }
             }
           }
         }
+        imesh.n_elements += imesh.blocks[block_index].n_elements;
+        block_index++;
+      } catch (std::out_of_range &const e) {
+        MSH2EXO_ERROR(fmt::format("{}\n Could not find physical tag {} in mesh entities, check msh file", e.what(), physical.tag));
       }
-      imesh.n_elements += imesh.blocks[block_index].n_elements;
-      block_index++;
     } else {
-      auto &ent_set = phys_ents.at(physical.tag);
-      std::set<size_t> ss_nodes;
-      for (auto e_group : element_groups) {
-        if (e_group.dim == physical.dim &&
-            ent_set.find(e_group.tag) != ent_set.end()) {
-          for (size_t i = 0; i < e_group.connectivity.size(); i++) {
-            ss_nodes.insert(node_map.at(e_group.connectivity[i]));
+      try {
+
+        auto &ent_set = phys_ents.at(physical.tag);
+        std::set<size_t> ss_nodes;
+        for (auto e_group : element_groups) {
+          if (e_group.dim == physical.dim &&
+              ent_set.find(e_group.tag) != ent_set.end()) {
+            for (size_t i = 0; i < e_group.connectivity.size(); i++) {
+              ss_nodes.insert(node_map.at(e_group.connectivity[i]));
+            }
           }
         }
+        imesh.boundaries[boundary_index].name = physical.name;
+        imesh.boundaries[boundary_index].tag = physical.tag;
+        imesh.boundaries[boundary_index].nodes.resize(ss_nodes.size());
+        std::copy(ss_nodes.begin(), ss_nodes.end(),
+                  imesh.boundaries[boundary_index].nodes.begin());
+        boundary_index++;
+
+      } catch (std::out_of_range &const e) {
+        MSH2EXO_ERROR(fmt::format("{}\n Could not find physical tag {} in mesh entities, check msh file", e.what(), physical.tag));
       }
-      imesh.boundaries[boundary_index].name = physical.name;
-      imesh.boundaries[boundary_index].tag = physical.tag;
-      imesh.boundaries[boundary_index].nodes.resize(ss_nodes.size());
-      std::copy(ss_nodes.begin(), ss_nodes.end(),
-                imesh.boundaries[boundary_index].nodes.begin());
-      boundary_index++;
     }
   }
 
