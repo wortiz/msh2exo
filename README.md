@@ -127,10 +127,10 @@ A working build for Windows 10 with Visual Studio 2019 was done as follows:
 
 Prerequisites:
 
-[Git](https://git-scm.com/)
-[vcpkg](https://vcpkg.io/en/index.html)
-[Visual Studio](https://visualstudio.microsoft.com/) tested with 2019 community
-[CMake](https://cmake.org/)
+* [Git](https://git-scm.com/)
+* [vcpkg](https://vcpkg.io/en/index.html)
+* [Visual Studio](https://visualstudio.microsoft.com/) tested with 2019 community
+* [CMake](https://cmake.org/)
 
 My vcpkg was installed to `C:\src\vcpkg` the following will need to be adjusted if another location is used
 I did `vcpkg integrate install` to integrate with Visual Studio
@@ -141,7 +141,7 @@ I did `vcpkg integrate install` to integrate with Visual Studio
 
    ```
    .\vcpkg install fmt --triplet=x64-windows
-   .\vcpkg install netcdf --triplet=x64-windows
+   .\vcpkg install netcdf-c --triplet=x64-windows
    ```
 
 2. Build and Install Exodus
@@ -212,4 +212,16 @@ I did `vcpkg integrate install` to integrate with Visual Studio
 
    ```
    cmake --install . --config Release
+   ```
+
+   Currently the dll's need to be copied from the build directory to the install bin directory.
+
+   The following are created in the build/Release directory on my machine and should be copied to the installed bin/ directory where msh2exo.exe is placed
+
+   ```
+   hdf5.dll
+   hdf5_hl.dll
+   libcurl.dll
+   netcdf.dll
+   zlib1.dll
    ```
