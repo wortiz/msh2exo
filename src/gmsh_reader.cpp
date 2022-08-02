@@ -379,7 +379,7 @@ msh2exo::IntermediateMesh msh2exo::read_gmsh_file(std::string filepath) {
               imesh.blocks[block_index].connectivity.resize(
                   imesh.blocks[block_index].n_elements * n_nodes);
               for (int64_t i = 0;
-                   i < (imesh.blocks[block_index].n_elements * n_nodes); i++) {
+                   i < (e_group.elem_ids.size() * n_nodes); i++) {
                 imesh.blocks[block_index].connectivity[offset * n_nodes + i] =
                     node_map.at(e_group.connectivity[i]);
               }

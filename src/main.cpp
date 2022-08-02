@@ -9,6 +9,8 @@
 #include "exodus_writer.hpp"
 #include "gmsh_reader.hpp"
 #include "options.hpp"
+#include "fmt/format.h"
+#include "util.hpp"
 
 int main(int argc, char **argv) {
 
@@ -20,7 +22,11 @@ int main(int argc, char **argv) {
 
   CLI11_PARSE(app, argc, argv);
 
-  msh2exo::run_msh2exo(options);
+  try {
+    msh2exo::run_msh2exo(options);
+  } catch (std::exception &e) {
+    MSH2EXO_ERROR(fmt::format("{}\n", e.what()));
+  }
 
   return 0;
 }
