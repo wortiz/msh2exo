@@ -25,12 +25,12 @@ find_library(Gmsh_LIBRARIES NAMES gmsh libgmsh
 )
 
 if(Gmsh_INCLUDE_DIRS)
-  if(EXISTS ${Gmsh_INCLUDE_DIRS}/gmsh.h)
-    file(READ ${Gmsh_INCLUDE_DIRS}/gmsh.h GMSH_HEADER_FILE)
+  if(EXISTS ${Gmsh_INCLUDE_DIRS}/gmshc.h)
+    file(READ ${Gmsh_INCLUDE_DIRS}/gmshc.h GMSH_HEADER_FILE)
     string(REGEX MATCH "\#define GMSH_API_VERSION *\"([0-9,.]*).*\"" GMSH_VERSION_STRING ${GMSH_HEADER_FILE})
     set(Gmsh_VERSION ${CMAKE_MATCH_1} CACHE INTERNAL "Gmsh Version")
   else()
-    message(SEND_ERROR "Could not find " gmsh.h " in " ${Gmsh_INCLUDE_DIR} ".")
+    message(SEND_ERROR "Could not find " gmshc.h " in " ${Gmsh_INCLUDE_DIR} ".")
   endif()
 endif()
 
