@@ -388,7 +388,7 @@ msh2exo::IntermediateMesh msh2exo::read_gmsh_file(std::string filepath) {
         }
         imesh.n_elements += imesh.blocks[block_index].n_elements;
         block_index++;
-      } catch (std::out_of_range &const e) {
+      } catch (std::out_of_range & e) {
         MSH2EXO_ERROR(fmt::format("{}\n Could not find physical tag {} in mesh entities, check msh file", e.what(), physical.tag));
       }
     } else {
@@ -411,7 +411,7 @@ msh2exo::IntermediateMesh msh2exo::read_gmsh_file(std::string filepath) {
                   imesh.boundaries[boundary_index].nodes.begin());
         boundary_index++;
 
-      } catch (std::out_of_range &const e) {
+      } catch (std::out_of_range & e) {
         MSH2EXO_ERROR(fmt::format("{}\n Could not find physical tag {} in mesh entities, check msh file", e.what(), physical.tag));
       }
     }
